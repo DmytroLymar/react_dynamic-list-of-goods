@@ -5,38 +5,60 @@ import { GoodsList } from './GoodsList';
 import { getAll, get5First, getRedGoods } from './api/goods';
 import { Good } from './types/Good';
 
+enum LoadType {
+  All,
+  FirstFive,
+  Red,
+}
+
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
 
-  const handlerLoadAll = () => {
-    getAll().then(goodsFromServer => setGoods(goodsFromServer));
-  };
+  const handleLoad = (loadType: LoadType) => {
+    let promise: Promise<Good[]>;
 
-  const handlerLoadFirstFive = () => {
-    get5First().then(goodsFromServer => setGoods(goodsFromServer));
-  };
+    switch (loadType) {
+      case LoadType.All:
+        promise = getAll();
+        break;
+      case LoadType.FirstFive:
+        promise = get5First();
+        break;
+      case LoadType.Red:
+        promise = getRedGoods();
+        break;
+    }
 
-  const handlerLoadRed = () => {
-    getRedGoods().then(goodsFromServer => setGoods(goodsFromServer));
+    promise
+      .then(goodsFromServer => setGoods(goodsFromServer))
+      .catch(() => setGoods([]));
   };
 
   return (
     <div className="App">
       <h1>Dynamic list of Goods</h1>
 
-      <button type="button" data-cy="all-button" onClick={handlerLoadAll}>
+      <button
+        type="button"
+        data-cy="all-button"
+        onClick={() => handleLoad(LoadType.All)}
+      >
         Load all goods
       </button>
 
       <button
         type="button"
         data-cy="first-five-button"
-        onClick={handlerLoadFirstFive}
+        onClick={() => handleLoad(LoadType.FirstFive)}
       >
         Load 5 first goods
       </button>
 
-      <button type="button" data-cy="red-button" onClick={handlerLoadRed}>
+      <button
+        type="button"
+        data-cy="red-button"
+        onClick={() => handleLoad(LoadType.Red)}
+      >
         Load red goods
       </button>
 
