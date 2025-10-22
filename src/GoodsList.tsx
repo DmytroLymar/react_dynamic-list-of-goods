@@ -4,7 +4,7 @@ import { Good } from './types/Good';
 type Props = {
   goods: Good[];
 };
-
+// color change included
 export const GoodsListComponent: React.FC<Props> = ({ goods }) => (
   <ul>
     {goods.map(good => (
