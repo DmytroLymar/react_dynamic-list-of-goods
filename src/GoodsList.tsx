@@ -6,6 +6,8 @@ type Props = {
 };
 // color change included
 export const GoodsListComponent: React.FC<Props> = ({ goods }) => (
+
+const GoodsListComponent: React.FC<Props> = ({ goods }) => (
   <ul>
     {goods.map(good => (
       <li key={good.id} data-cy="good" style={{ color: good.color }}>
